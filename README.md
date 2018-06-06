@@ -1,6 +1,12 @@
 
 # **Udacity Lyft Challenge**
 
+This submission was #9 on the leaderboard with:
+- Final score: 91.77
+- Avg. F Score: 0.9177
+- Car F Score: 0.8502
+- Road F Score: 0.9852
+
 ## **Goal**
 
 Create a model that can do pixel-wise identification of objects in camera images from an urban driving simulation ( [CARLA](http://carla.org/)).

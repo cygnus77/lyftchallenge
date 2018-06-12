@@ -77,7 +77,7 @@ VGG16 was the first model I used as I was getting a grip on the data and setting
 
 I achieved fairly good accuracy (got me to #4 on the leaderboard), but at a leisurely 4 fps.
 
-In hind-sight, I should have optimized VGG's prediction speed by freezing the graph - converting variables into constants. That would have resulted in a simpler graph structure, with unnecessary training nodes removed. In fact, the [winning entry](https://github.com/asadziach/CarND-Semantic-Segmentation) in the competition used VGG-16 !
+In hind-sight, I should have optimized VGG's prediction speed by fusing operations and reducing precision on the graph using tensorflow's [transform_graph](https://github.com/tensorflow/tensorflow/tree/master/tensorflow/tools/graph_transforms) tool. That would have resulted in a simpler graph structure, with unnecessary training nodes removed. In fact, the [winning entry](https://github.com/asadziach/CarND-Semantic-Segmentation) in the competition used VGG-16 !
 
 ### **Resnet50**
 
@@ -242,7 +242,7 @@ At the end of training, I would test the model on Udacity&#39;s workspace and lo
 
 ## **Prediction**
 
-For efficient prediction, the key is to minimize numpy operations outside the TensorFlow graph - it is possible to do most transformations within the graph itself, maximizing GPU acceleration.
+To improve inference speed, I minimized numpy operations outside the TensorFlow graph - it is possible to do most transformations within the graph itself, maximizing GPU acceleration. The graph was also frozen to convert variables to constants.
 
 After the Keras model was exported to .pb protobuf and loaded in to a TensorFlow graph, I accessed the input placeholder and output tensor by supplying the layer names to the tf.import\_graph\_def function. To these tensors, I attached pre- and post-processing operations as follows:
 
@@ -279,8 +279,7 @@ The simplest optimization for prediction is to batch the data, maximizing GPU us
 - Performance improvements:
   - Cropping to a smaller region of interest
   - Scaling down to a smaller input image size
-  - Freeze graph (using tensorflow/freeze_graph.py)
   - Inference optimization (using tensorflow/optimize_for_inference)
-  - Quantize weights (using tensorflow/transform_graph)
+  - Quantize weights and fusing operations (using tensorflow/transform_graph)
 - Improving accuracy
   - Further adjusting weights on the loss function

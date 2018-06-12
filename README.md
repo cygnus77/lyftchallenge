@@ -77,6 +77,8 @@ VGG16 was the first model I used as I was getting a grip on the data and setting
 
 I achieved fairly good accuracy (got me to #4 on the leaderboard), but at a leisurely 4 fps.
 
+In hind-sight, I should have optimized VGG's prediction speed by freezing the graph - converting variables into constants. That would have resulted in a simpler graph structure, with unnecessary training nodes removed. In fact, the [winning entry](https://github.com/asadziach/CarND-Semantic-Segmentation) in the competition used VGG-16 !
+
 ### **Resnet50**
 
 In an effort to push accuracy higher, I tested the resnet50 model, also with pre-trained weights. Though accuracy was high, it quickly became clear that it was not going to get me to the 10-fps level to avoid penalties.
@@ -271,3 +273,14 @@ The simplest optimization for prediction is to batch the data, maximizing GPU us
 - ./preinstall_script.sh
 - tester 'python predict.py weights.pb'
 - grader 'python predict.py weights.pb'
+
+### Future Improvements
+
+- Performance improvements:
+  - Cropping to a smaller region of interest
+  - Scaling down to a smaller input image size
+  - Freeze graph (using tensorflow/freeze_graph.py)
+  - Inference optimization (using tensorflow/optimize_for_inference)
+  - Quantize weights (using tensorflow/transform_graph)
+- Improving accuracy
+  - Further adjusting weights on the loss function
